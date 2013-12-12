@@ -1,3 +1,6 @@
+__version__ = '0.0'
+
+
 HTTPSConnection = None
 try:
     import httplib
@@ -12,20 +15,20 @@ import json
 ROOT_API = "eu.api.ovh.com"
 
 
-def request_token(app_key, url,
+def request_token(app_key,
                   POST=[],
                   GET=[],
                   PUT=[],
-                  DELETE=[]):
+                  DELETE=[],
+                  redirect_url=None):
     headers = {
         'X-Ovh-Application': app_key,
         'Content-type': 'application/json'
     }
     
-    params = {
-        'accessRules': [],
-        'redirection': url
-    }
+    params = {'accessRules': []}
+    if redirection:
+        params['redirection'] = redirect_url
     
     rules = []
     for path in POST:
