@@ -27,7 +27,7 @@ def request_token(app_key,
     }
     
     params = {'accessRules': []}
-    if redirection:
+    if redirect_url:
         params['redirection'] = redirect_url
     
     rules = []
