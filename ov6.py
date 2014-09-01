@@ -102,18 +102,17 @@ class OVHApi(object):
         
         body = ''
         method = method.upper()
-        path = '/1.0' + path
+        path = '/1.0%s' % path
         
         if not timestamp:
             timestamp = get_ovh_timestamp()
         
-        if params:
-            body = json.dumps(params)
+        body = '' if not params else json.dumps(params)
         
         signature = sign_request(self.app_secret,
                                  self.consumer_key,
                                  method,
-                                 'https://' + ROOT_API + path,
+                                 'https://%s%s' % (ROOT_API, path),
                                  timestamp,
                                  body)
         
@@ -121,7 +120,9 @@ class OVHApi(object):
         headers = {'X-Ovh-Application': self.app_key,
                    'X-Ovh-Signature': signature,
                    'X-Ovh-Consumer': self.consumer_key,
-                   'X-Ovh-Timestamp': timestamp}
+                   'X-Ovh-Timestamp': timestamp,
+                   'Content-type': 'application/json',
+                   'Content-length': len(body)}
         
         conn = HTTPSConnection(ROOT_API)
         conn.request(method, path, body, headers)
